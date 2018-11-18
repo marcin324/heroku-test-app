@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://<marcin324>:<miska2003>@ds029911.mlab.com:29911/test-app-database');
+mongoose.connect('mongodb://mich1309:miska2003@ds029911.mlab.com:29911/test-app-database');
 
 //new user Schema
 const userSchema = new Schema({
@@ -88,18 +88,18 @@ const findSpecificRecord = function() {
     })
 }
 
-const updadeUserPassword = function() {
+const updateUserPassword = function() {
     // update user password
     return User.findOne({ username: 'Kenny_the_boy' })
         .then(function(user) {
-            console.log('Old password is ' + user.password);
-            console.log('Name ' + user.name);
+            console.log('Old password is: ' + user.password);
+            console.log('Name: ' + user.name);
             user.password = 'newPassword';
-            console.log('New password is ' + user.password);
+            console.log('New password is: ' + user.password);
             return user.save(function(err) {
                 if (err) throw err;
 
-                console.log('Uzytkownik ' + user.name + ' zostal pomyslnie zaktualizowany');
+                console.log('Użytkownik ' + user.name + ' został pomyślnie zaktualizowany');
             })
         })
 }
@@ -109,13 +109,13 @@ const updateUsername = function() {
     return User.findOneAndUpdate({ username: 'Benny_the_boy' }, { username: 'Benny_the_man' }, { new: true }, function(err, user) {
         if (err) throw err;
 
-        console.log('Nazwa uzytkownika po aktualizacji to ' + user.username);
+        console.log('Nazwa użytkownika po aktualizacji to ' + user.username);
     })
 }
 
 const findMarkAndDelete = function() {
     // find specific user and delete
-    return User.findOne({ username: 'Mark_the_boy' })
+    return User.findOneAndRemove({ username: 'Mark_the_boy' })
         .then(function(user) {
             return user.remove(function() {
                 console.log('User successfully deleted');
@@ -125,7 +125,7 @@ const findMarkAndDelete = function() {
 
 const findKennyAndDelete = function() {
     // find specific user and delete
-    return User.findOne({ username: 'Kenny_the_boy' })
+    return User.findOneAndRemove({ username: 'Kenny_the_boy' })
         .then(function(user) {
             return user.remove(function() {
                 console.log('User successfully deleted');
@@ -146,7 +146,7 @@ const findBennyAndRemove = function() {
 Promise.all([kenny.save(), mark.save(), benny.save()])
     .then(findAllUsers)
     .then(findSpecificRecord)
-    .then(updadeUserPassword)
+    .then(updateUserPassword)
     .then(updateUsername)
     .then(findMarkAndDelete)
     .then(findKennyAndDelete)
